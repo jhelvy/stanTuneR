@@ -18,16 +18,16 @@ ui <- fluidPage(
       # Input: Numeric entry for LOWER quantile boundary ----
       numericInput(inputId = 'bound_L',
                    label = 'Lower quantile boundary:',
-                   value = -1),
+                   value = -2),
 
       # Input: Numeric entry for UPPER quantile boundary ----
       numericInput(inputId = 'bound_U',
                    label = 'Upper quantile boundary:',
-                   value = 1),
+                   value = 2),
 
       sliderInput('dens',
                   label = 'Target density limits:',
-                  min = 0, max = 1, value = c(0, 1))
+                  min = 0, max = 1, value = c(0.01, 0.99))
 
     ),
 
