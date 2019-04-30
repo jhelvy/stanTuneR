@@ -1,11 +1,3 @@
-# Color scheme copied from betanalpha (thanks!)
-light           <- c("#DCBCBC")
-light_highlight <- c("#C79999")
-mid             <- c("#B97C7C")
-mid_highlight   <- c("#A25050")
-dark            <- c("#8F2727")
-dark_highlight  <- c("#7C0000")
-
 # Main function for finding distribution parameters
 tuneParams <- function(distribution, targets) {
     # Create and fit a stan model file
@@ -51,9 +43,10 @@ makeHistogram = function(draws, quantiles) {
     draws = draws[which(draws < quantile(draws, 0.999))]
     # Make the plot
     histogram = ggplot(data.frame(draws), aes(x=draws)) +
-        geom_histogram(fill=light, color=light_highlight) +
+        geom_histogram(bins=30, fill='#DCBCBC', color='#C79999') +
         geom_vline(xintercept=quantiles,
-            color=mid, linetype='dashed', size=1) +
+                   color='#B97C7C', linetype='dashed', size=1) +
+        # Color scheme copied from betanalpha (Thanks Michael!)
         theme_bw() +
         labs(x='x', y='Count')
     return(histogram)
