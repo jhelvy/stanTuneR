@@ -7,17 +7,22 @@ John Helveston
 
 This code uses the algebra solver in [Stan](https://mc-stan.org/) to
 find the parameters of a distribution that produce a desired tail
-behavior. This can be useful when choosing parameters for prior
-distributions.
+behavior. This can be a useful tool when choosing parameters for prior
+distributions. Check out the `examples.R` file for a few examples.
 
-Here’s how to use it: 1. Select a distribution. 2. Define the quantile
-boundaries and the amount of probability density that you wish to have
-above and below those boundaries. 3. Let Stan go find the parameters
-that produce the desired distribution.
+Here’s how to use it:
 
-Check out the `examples.R` file for a few examples.
+1.  Select a distribution.
+2.  Define the quantile boundaries and the amount of probability density
+    that you wish to have above and below those boundaries.
+3.  Let Stan go find the parameters that produce the desired
+    distribution.
 
-Currently supported distributions: \* Normal \* Beta \* Inverse Gamma
+Currently supported distributions:
+
+  - Normal
+  - Beta
+  - Inverse Gamma
 
 # Example
 
@@ -27,7 +32,8 @@ normal distribution where 98% of the probability density is between (-2,
 2).
 
 First, load the rstan library, tweak some settings, and source the
-`utility.R` file:
+`utility.R` file (all functions are loaded in a new environment called
+`util`):
 
 ``` r
 library(rstan)
@@ -39,7 +45,15 @@ util <- new.env()
 source('utility.R', local=util)
 ```
 
-Use the `targets` argument to set these boundaries:
+Then use the `targets` argument to set the desired tail properties:
+
+``` r
+targets = list(
+    bound_L = -2,   # LOWER quantile boundary
+    bound_U = 2,    # UPPER quantile boundary
+    dens_L  = 0.01, # Target density below LOWER quantile boundary
+    dens_U  = 0.01) # Target density above UPPER quantile boundary
+```
 
 Then use the `tuneParams` function to find the parameters:
 
@@ -74,7 +88,7 @@ result$quantiles
 ```
 
     ##        1%       99% 
-    ## -1.992413  2.007378
+    ## -2.012830  2.004631
 
 Finally, view a histogram of the resulting distribution:
 

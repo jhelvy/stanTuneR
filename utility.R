@@ -73,6 +73,7 @@ saveStanCode <- function(stanCode) {
     close(file)
 }
 
+# Code for generating Stan model for a Normal distribution
 generateStanCode_normal <- function(targets) {
 
     mu_guess    <- 0
@@ -128,11 +129,7 @@ generateStanCode_normal <- function(targets) {
     return(stanCode)
 }
 
-
-
-
-
-
+# Code for generating Stan model for a Beta distribution
 generateStanCode_beta <- function(targets) {
 
     alpha_guess <- 0.5
@@ -188,13 +185,7 @@ generateStanCode_beta <- function(targets) {
     return(stanCode)
 }
 
-
-
-
-
-
-
-
+# Code for generating Stan model for an inverse Gamma distribution
 generateStanCode_inv_gamma <- function(targets) {
 
     alpha_guess <- 5

@@ -10,16 +10,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # stanTuner
-This code uses the algebra solver in [Stan](https://mc-stan.org/) to find the parameters of a distribution that produce a desired tail behavior. This can be useful when choosing parameters for prior distributions.
+This code uses the algebra solver in [Stan](https://mc-stan.org/) to find the parameters of a distribution that produce a desired tail behavior. This can be a useful tool when choosing parameters for prior distributions. Check out the `examples.R` file for a few examples.
 
 Here's how to use it:
+
 1. Select a distribution.
 2. Define the quantile boundaries and the amount of probability density that you wish to have above and below those boundaries.
 3. Let Stan go find the parameters that produce the desired distribution.
 
-Check out the `examples.R` file for a few examples.
-
 Currently supported distributions:
+
 * Normal
 * Beta
 * Inverse Gamma
@@ -27,7 +27,7 @@ Currently supported distributions:
 # Example
 Let's say I want to find the parameters of a normal distribution such that P[x < -2.0] ~ 0.01 and P[x > 2.0] ~ 0.01. That is, I want a normal distribution where 98% of the probability density is between (-2, 2).
 
-First, load the rstan library, tweak some settings, and source the `utility.R` file:
+First, load the rstan library, tweak some settings, and source the `utility.R` file (all functions are loaded in a new environment called `util`):
 
 ```{r warning=FALSE, message=FALSE}
 library(rstan)
@@ -39,8 +39,8 @@ util <- new.env()
 source('utility.R', local=util)
 ```
 
-Use the `targets` argument to set these boundaries:
-```{r echo=FALSE}
+Then use the `targets` argument to set the desired tail properties:
+```{r}
 targets = list(
     bound_L = -2,   # LOWER quantile boundary
     bound_U = 2,    # UPPER quantile boundary
