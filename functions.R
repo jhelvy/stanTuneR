@@ -11,6 +11,7 @@ tuneParams <- function(distribution, targets) {
     # Summarize and store results
     result <- summarizeResults(params, distribution, targets)
     return(result)
+    # return(list(params = c(1, 1)))
 }
 
 # -----------------------------------------------------------------------

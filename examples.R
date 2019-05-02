@@ -1,13 +1,17 @@
 # ----------------------------------------------------------------------------
 # Initial setup
 
+# Load libraries
+library(shiny)
 library(rstan)
-# Set auto_write to false because I want to always search from scratch
-rstan_options(auto_write = FALSE)
+
+# Stan settings
+rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
-util <- new.env()
-source('utility.R', local=util)
+# Load the functions
+funcs <- new.env()
+source('functions.R', local=funcs)
 
 # ----------------------------------------------------------------------------
 # Find normal distribution parameters with targets:
@@ -20,7 +24,7 @@ targets = list(
     dens_L  = 0.01, # Target density below LOWER quantile boundary
     dens_U  = 0.01) # Target density above UPPER quantile boundary
 
-result = util$tuneParams(distribution='normal', targets)
+result = funcs$tuneParams(distribution='normal', targets)
 result$params
 result$quantiles
 result$histogram
@@ -36,7 +40,7 @@ targets = list(
     dens_L  = 0.01, # Target density below LOWER quantile boundary
     dens_U  = 0.01) # Target density above UPPER quantile boundary
 
-result = util$tuneParams(distribution='beta', targets)
+result = funcs$tuneParams(distribution='beta', targets)
 result$params
 result$quantiles
 result$histogram
@@ -52,7 +56,7 @@ targets = list(
     dens_L  = 0.01, # Target density below LOWER quantile boundary
     dens_U  = 0.01) # Target density above UPPER quantile boundary
 
-result = util$tuneParams(distribution='inv_gamma', targets)
+result = funcs$tuneParams(distribution='inv_gamma', targets)
 result$params
 result$quantiles
 result$histogram
