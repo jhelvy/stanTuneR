@@ -26,3 +26,5 @@ generated quantities {
   real mu = y[1];
   real sigma = y[2];
 }
+
+

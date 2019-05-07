@@ -2,16 +2,15 @@
 tuneParams <- function(distribution, targets) {
     # Create and fit a stan model file
     generateStanCode(distribution, targets)
-    # Get the parameters (round to nearest 5th decimal space)
+    # Get the parameters (rounded to nearest 5th decimal space)
     fit <- stan(file='./model.stan', iter=1, warmup=0, chains=1,
                 algorithm="Fixed_param")
     params <- extract(fit)
     params$lp__ <- NULL
     for (i in 1:length(params)) {params[[i]] <- round(params[[i]], 5)}
     # Summarize and store results
-    result <- summarizeResults(params, distribution, targets)
-    return(result)
-    # return(list(params = c(1, 1)))
+    results <- summarizeResults(params, distribution, targets)
+    return(results)
 }
 
 # -----------------------------------------------------------------------
@@ -125,6 +124,7 @@ generateStanCode_normal <- function(targets) {
     functionsCode,
     transformedDataCode,
     generatedQuantitiesCode,
+    '\n',
     sep='\n')
 
     return(stanCode)
@@ -181,6 +181,7 @@ generateStanCode_beta <- function(targets) {
     functionsCode,
     transformedDataCode,
     generatedQuantitiesCode,
+    '\n',
     sep='\n')
 
     return(stanCode)
@@ -237,6 +238,7 @@ generateStanCode_inv_gamma <- function(targets) {
     functionsCode,
     transformedDataCode,
     generatedQuantitiesCode,
+    '\n',
     sep='\n')
 
     return(stanCode)

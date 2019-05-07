@@ -2,7 +2,9 @@
 # Initial setup
 
 # Load libraries
+library(dplyr)
 library(shiny)
+library(shinycssloaders)
 library(rstan)
 
 # Stan settings
@@ -18,8 +20,11 @@ source('functions.R', local=funcs)
 
 getTargetsHtml <- function(input) {
   targetsHtml <- paste(
-    '<p>Press the "Tune It!" button to search for the parameters of a <b>',
-    input$distribution, '</b> distribution with the following properties:</p>',
+    '<h3>Instructions:</h3>',
+    '<p>Change the settings in the sidebar, then press the "Tune It!" ',
+    'button to find the parameters.</p>',
+    '<h3>Current settings:</h3>',
+    '<b>', input$distribution, '</b> distribution with the following properties:</p>',
     '<ul>',
     '<li>', 100*input$dens[1], '% of the density below ',
     input$bound_L, '</li>',
@@ -27,7 +32,7 @@ getTargetsHtml <- function(input) {
     input$bound_U, '</li>',
     '<li>', 100*(input$dens[2] - input$dens[1]),
     '% of the density between ', input$bound_L, ' and ',
-    input$bound_U, '</li>', '</ul>', sep='')
+    input$bound_U, '</li>', '</ul>', '<hr>', sep='')
   return(targetsHtml)
 }
 
@@ -47,8 +52,27 @@ getTargets <- function(input) {
   return(targets)
 }
 
-getParamsOutput <- function(result) {
-  params = as.character(result$params)
+getResultsHtml <- function(results) {
+  paramsHtml    <- buildResultHtml(results$params)
+  quantilesHtml <- buildResultHtml(round(results$quantiles, 5))
+  resultsHtml   <- paste(
+    '<h3>Results:</h3>',
+    '<b>Parameter estimates:</b>',
+    paramsHtml, '<br>',
+    '<b>Quantile summary:</b>',
+    quantilesHtml, '<br>',
+    '<b>Histogram:</b>', sep='')
+  return(resultsHtml)
+}
+
+buildResultHtml <- function(result) {
+  html = '<p>'
+  for (i in 1:length(result)) {
+    html = paste(html, names(result)[i], ': ',
+      result[i], '<br>', sep='')
+  }
+  html = paste(html, '</p>', sep='')
+  return(html)
 }
 
 # ----------------------------------------------------------------------------
@@ -56,26 +80,26 @@ getParamsOutput <- function(result) {
 
 ui <- fluidPage(
 
-  # App title ----
+  # App title
   titlePanel('Stan Tuner'),
 
-  # Sidebar layout with a input and output definitions ----
+  # Sidebar layout with a input and output definitions
   sidebarLayout(
 
-    # Sidebar panel for inputs ----
+    # Sidebar panel for inputs
     sidebarPanel(
 
-      # Input: Selector for choosing dataset ----
+      # Input: Selector for choosing dataset
       selectInput(inputId = 'distribution',
                   label = 'Select a distribution:',
                   choices = c('Normal', 'Beta', 'Inverse-Gamma')),
 
-      # Input: Numeric entry for LOWER quantile boundary ----
+      # Input: Numeric entry for LOWER quantile boundary
       numericInput(inputId = 'bound_L',
                    label = 'Lower quantile boundary:',
                    value = -2),
 
-      # Input: Numeric entry for UPPER quantile boundary ----
+      # Input: Numeric entry for UPPER quantile boundary
       numericInput(inputId = 'bound_U',
                    label = 'Upper quantile boundary:',
                    value = 2),
@@ -88,12 +112,13 @@ ui <- fluidPage(
 
     ),
 
-    # Main panel for displaying outputs ----
+    # Main panel for displaying outputs
     mainPanel(
 
-      # Output: Verbatim text for data summary ----
-      uiOutput('selected_targets'),
-      textOutput('params')
+      # Output:
+      htmlOutput('selected_targets'),
+      htmlOutput('results') %>% withSpinner(color='#0dc5c1'),
+      plotOutput('histogram', width=100)
 
     )
   )
@@ -102,17 +127,25 @@ ui <- fluidPage(
 # ----------------------------------------------------------------------------
 # Define Server
 
-server <- function(input, output) {
+server <- function(input, output, session) {
 
-  output$selected_targets <- renderUI(HTML(getTargetsHtml(input)))
+  output$selected_targets <- renderUI(HTML(
+    getTargetsHtml(input)
+  ))
 
-  observeEvent(input$tuneIt, {
-    distribution  <- getRenamedDistribution(input)
-    targets       <- getTargets(input)
-    result        <- funcs$tuneParams(distribution, targets)
-    output$params <- renderText(getParamsOutput(result))
-    }
-  )
+   results <- eventReactive(input$tuneIt, {
+    distribution <- getRenamedDistribution(input)
+    targets      <- getTargets(input)
+    return(funcs$tuneParams(distribution, targets))
+  })
+
+  output$results <- renderText({
+    getResultsHtml(results())
+  })
+
+  output$histogram <- renderPlot({
+    results()$histogram},
+    height = 300, width = 400)
 
 }
 
@@ -120,4 +153,3 @@ server <- function(input, output) {
 # Run the app
 
 shinyApp(ui, server)
-

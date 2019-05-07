@@ -24,10 +24,10 @@ targets = list(
     dens_L  = 0.01, # Target density below LOWER quantile boundary
     dens_U  = 0.01) # Target density above UPPER quantile boundary
 
-result = funcs$tuneParams(distribution='normal', targets)
-result$params
-result$quantiles
-result$histogram
+results = funcs$tuneParams(distribution='normal', targets)
+results$params
+results$quantiles
+results$histogram
 
 # ----------------------------------------------------------------------------
 # Find beta distribution parameters with targets:
@@ -40,10 +40,10 @@ targets = list(
     dens_L  = 0.01, # Target density below LOWER quantile boundary
     dens_U  = 0.01) # Target density above UPPER quantile boundary
 
-result = funcs$tuneParams(distribution='beta', targets)
-result$params
-result$quantiles
-result$histogram
+results = funcs$tuneParams(distribution='beta', targets)
+results$params
+results$quantiles
+results$histogram
 
 # ----------------------------------------------------------------------------
 # Find inv_gamma distribution parameters with targets:
@@ -56,7 +56,7 @@ targets = list(
     dens_L  = 0.01, # Target density below LOWER quantile boundary
     dens_U  = 0.01) # Target density above UPPER quantile boundary
 
-result = funcs$tuneParams(distribution='inv_gamma', targets)
-result$params
-result$quantiles
-result$histogram
+results = funcs$tuneParams(distribution='inv_gamma', targets)
+results$params
+results$quantiles
+results$histogram
