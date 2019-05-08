@@ -8,11 +8,9 @@ John Helveston
 This code uses the algebra solver in [Stan](https://mc-stan.org/) to
 find the parameters of a distribution that produce a desired tail
 behavior. This can be a useful tool when choosing parameters for prior
-distributions. Check out the `examples.R` file for a few examples.
+distributions. Here’s how to use it:
 
-Here’s how to use it:
-
-1.  Select a distribution.
+1.  Choose a distribution.
 2.  Define the quantile boundaries and the amount of probability density
     that you wish to have above and below those boundaries.
 3.  Let Stan go find the parameters that produce the desired
@@ -24,25 +22,47 @@ Currently supported distributions:
   - Beta
   - Inverse Gamma
 
-# Example
+# Required libraries:
+
+If you don’t want to use the shiny app interface, you only need to have
+the `rstan` library installed (and obviously also have
+[Stan](https://mc-stan.org/) installed).
+
+If you want to use the shiny app interface, you will also need to
+install the `shiny` and `shinycssloaders` libraries
+
+# Using the Shiny app
+
+To use the Shiny app, just run the following code in R:
+
+    library(shiny)
+    runGitHub('jhelvy/stanTuner')
+
+# Example without the Shiny app
+
+(see the `examples.R` file for more examples)
 
 Let’s say I want to find the parameters of a normal distribution such
 that P\[x \< -2.0\] ~ 0.01 and P\[x \> 2.0\] ~ 0.01. That is, I want a
 normal distribution where 98% of the probability density is between (-2,
 2).
 
-First, load the rstan library, tweak some settings, and source the
-`utility.R` file (all functions are loaded in a new environment called
-`util`):
+First, load the `rstan` library, tweak some settings, and source the
+`functions.R` file (all functions are loaded in a new environment called
+`funcs`):
 
 ``` r
+# Load libraries
+library(shiny)
 library(rstan)
-# Set auto_write to false because I want to always search from scratch
-rstan_options(auto_write = FALSE)
+
+# Stan settings
+rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
-util <- new.env()
-source('utility.R', local=util)
+# Load the functions
+funcs <- new.env()
+source('functions.R', local=funcs)
 ```
 
 Then use the `targets` argument to set the desired tail properties:
@@ -58,7 +78,7 @@ targets = list(
 Then use the `tuneParams` function to find the parameters:
 
 ``` r
-result = util$tuneParams(distribution='normal', targets)
+results = funcs$tuneParams(distribution='normal', targets)
 ```
 
     ## 
@@ -66,15 +86,15 @@ result = util$tuneParams(distribution='normal', targets)
     ## Chain 1: Iteration: 1 / 1 [100%]  (Sampling)
     ## Chain 1: 
     ## Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-    ## Chain 1:                2.2e-05 seconds (Sampling)
-    ## Chain 1:                2.2e-05 seconds (Total)
+    ## Chain 1:                2.4e-05 seconds (Sampling)
+    ## Chain 1:                2.4e-05 seconds (Total)
     ## Chain 1:
 
 View the resulting parameters and verify that the quantiles of 10,000
 draws from the resulting distribution match your criteria:
 
 ``` r
-result$params
+results$params
 ```
 
     ## $mu
@@ -84,16 +104,16 @@ result$params
     ## [1] 0.85972
 
 ``` r
-result$quantiles
+results$quantiles
 ```
 
     ##        1%       99% 
-    ## -2.012830  2.004631
+    ## -1.998884  1.999871
 
 Finally, view a histogram of the resulting distribution:
 
 ``` r
-result$histogram
+results$histogram
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->

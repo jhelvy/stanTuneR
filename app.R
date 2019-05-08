@@ -2,7 +2,6 @@
 # Initial setup
 
 # Load libraries
-library(dplyr)
 library(shiny)
 library(shinycssloaders)
 library(rstan)
@@ -117,7 +116,7 @@ ui <- fluidPage(
 
       # Output:
       htmlOutput('selected_targets'),
-      htmlOutput('results') %>% withSpinner(color='#0dc5c1'),
+      withSpinner(htmlOutput('results'), color='#0dc5c1'),
       plotOutput('histogram', width=100)
 
     )
