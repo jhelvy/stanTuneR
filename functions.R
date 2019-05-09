@@ -72,7 +72,7 @@ getStanCode_normal <- function(targets) {
     mu_guess    <- 0
     sigma_guess <- 1
 
-    functionsCode <- paste(
+    return(paste(
     'functions {',
     '  // Differences between tail probabilities and target probabilities',
     '  vector tail_delta(vector y, vector theta, real[] x_r, int[] x_i) {',
@@ -84,9 +84,6 @@ getStanCode_normal <- function(targets) {
     '    return deltas;',
     '  }',
     '}',
-    sep='\n')
-
-    transformedDataCode <- paste(
     'transformed data {',
     '  // Number of simulated observations in generated quantities',
     '  int<lower=0> N = 10000;',
@@ -104,9 +101,6 @@ getStanCode_normal <- function(targets) {
     '  int x_i[0];',
     '  y = algebra_solver(tail_delta, y_guess, theta, x_r, x_i);',
     '}',
-    sep='\n')
-
-    generatedQuantitiesCode <- paste(
     'generated quantities {',
     '  real mu = y[1];',
     '  real sigma = y[2];',
@@ -115,13 +109,7 @@ getStanCode_normal <- function(targets) {
     '  for (n in 1:N)',
     '    y_sim[n] = normal_rng(mu, sigma);',
     '}',
-    sep='\n')
-
-    return(paste(
-        functionsCode,
-        transformedDataCode,
-        generatedQuantitiesCode,
-        '\n', sep='\n'))
+    sep='\n'))
 }
 
 # Code for generating Stan model for a Beta distribution
@@ -130,7 +118,7 @@ getStanCode_beta <- function(targets) {
     alpha_guess <- 0.5
     beta_guess  <- 0.5
 
-    functionsCode <- paste(
+    return(paste(
     'functions {',
     '  // Differences between tail probabilities and target probabilities',
     '  vector tail_delta(vector y, vector theta, real[] x_r, int[] x_i) {',
@@ -142,9 +130,6 @@ getStanCode_beta <- function(targets) {
     '    return deltas;',
     '  }',
     '}',
-    sep='\n')
-
-    transformedDataCode <- paste(
     'transformed data {',
     '  // Number of simulated observations in generated quantities',
     '  int<lower=0> N = 10000;',
@@ -162,9 +147,6 @@ getStanCode_beta <- function(targets) {
     '  int x_i[0];',
     '  y = algebra_solver(tail_delta, y_guess, theta, x_r, x_i);',
     '}',
-    sep='\n')
-
-    generatedQuantitiesCode <- paste(
     'generated quantities {',
     '  real alpha = y[1];',
     '  real beta = y[2];',
@@ -173,22 +155,16 @@ getStanCode_beta <- function(targets) {
     '  for (n in 1:N)',
     '    y_sim[n] = beta_rng(alpha, beta);',
     '}',
-    sep='\n')
-
-    return(paste(
-        functionsCode,
-        transformedDataCode,
-        generatedQuantitiesCode,
-        '\n', sep='\n'))
+    sep='\n'))
 }
 
-# Code for generating Stan model for an inverse Gamma distribution
+# Code for generating Stan model for an Inverse Gamma distribution
 getStanCode_inv_gamma <- function(targets) {
 
     alpha_guess <- 5
     beta_guess  <- 5
 
-    functionsCode <- paste(
+    return(paste(
     'functions {',
     '  // Differences between tail probabilities and target probabilities',
     '  vector tail_delta(vector y, vector theta, real[] x_r, int[] x_i) {',
@@ -200,9 +176,6 @@ getStanCode_inv_gamma <- function(targets) {
     '    return deltas;',
     '  }',
     '}',
-    sep='\n')
-
-    transformedDataCode <- paste(
     'transformed data {',
     '  // Number of simulated observations in generated quantities',
     '  int<lower=0> N = 10000;',
@@ -220,9 +193,6 @@ getStanCode_inv_gamma <- function(targets) {
     '  int x_i[0];',
     '  y = algebra_solver(tail_delta, y_guess, theta, x_r, x_i);',
     '}',
-    sep='\n')
-
-    generatedQuantitiesCode <- paste(
     'generated quantities {',
     '  real alpha = exp(y[1]);',
     '  real beta = exp(y[2]);',
@@ -231,12 +201,6 @@ getStanCode_inv_gamma <- function(targets) {
     '  for (n in 1:N)',
     '    y_sim[n] = inv_gamma_rng(alpha, beta);',
     '}',
-    sep='\n')
-
-    return(paste(
-        functionsCode,
-        transformedDataCode,
-        generatedQuantitiesCode,
-        '\n', sep='\n'))
+    sep='\n'))
 }
 
