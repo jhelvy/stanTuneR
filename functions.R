@@ -28,7 +28,7 @@ summarizeResults <- function(fit, distribution, targets) {
     histogram <- makeHistogram(draws, quantiles)
     # Return the results
     return(list(
-        params=results, quantiles=quantiles, histogram=histogram, draws=draws))
+        params=results, draws=draws, quantiles=quantiles, histogram=histogram))
 }
 
 makeHistogram = function(draws, quantiles) {

@@ -19,6 +19,7 @@ This code uses the algebra solver in [Stan](https://mc-stan.org/) to find the pa
 Currently supported distributions:
 
 * Normal
+* Log-Normal
 * Beta
 * Inverse Gamma
 
@@ -82,6 +83,14 @@ Finally, view a histogram of the resulting distribution:
 ```{r}
 results$histogram
 ```
+
+# Explanation of the backend
+The meat of this app is in the `functions.R` code. The main function is the `tuneParams()` function. After the user defines the `distribution` and the `targets` for the quantiles and density, `tuneParams()` calls the `generateStanCode()` function to generate the Stan code for the model, which is written to the file `model.stan`. This file is always overwritten every time the `generateStanCode()` function is called. It then calls the `stan` function to fit the model. Finally, once the model is fit, it calls the `summarizeResults()` function to extract the results of the fit model. The output of `tuneParams()` is a list with the following values:
+
+* `params` : The fit parameters
+* `draws` : 10,000 draws from the resulting distribution using the fit parameters
+* `quantiles` : The quantiles of the draws at the desired upper and lower quantile boundaries 
+* `histogram` : A histogram of the draws
 
 # Author and License
 * Author: John Paul Helveston (www.jhelvy.com)

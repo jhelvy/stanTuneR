@@ -19,6 +19,7 @@ distributions. Here’s how to use it:
 Currently supported distributions:
 
   - Normal
+  - Log-Normal
   - Beta
   - Inverse Gamma
 
@@ -86,8 +87,8 @@ results = funcs$tuneParams(distribution='normal', targets)
     ## Chain 1: Iteration: 1 / 1 [100%]  (Sampling)
     ## Chain 1: 
     ## Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-    ## Chain 1:                2.4e-05 seconds (Sampling)
-    ## Chain 1:                2.4e-05 seconds (Total)
+    ## Chain 1:                0.000864 seconds (Sampling)
+    ## Chain 1:                0.000864 seconds (Total)
     ## Chain 1:
 
 View the resulting parameters and verify that the quantiles of 10,000
@@ -101,14 +102,14 @@ results$params
     ## [1] 0
     ## 
     ## $sigma
-    ## [1] 0.85972
+    ## [1] 0.859717
 
 ``` r
 results$quantiles
 ```
 
     ##        1%       99% 
-    ## -1.998884  1.999871
+    ## -2.027494  1.984122
 
 Finally, view a histogram of the resulting distribution:
 
@@ -117,6 +118,26 @@ results$histogram
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+# Explanation of the backend
+
+The meat of this app is in the `functions.R` code. The main function is
+the `tuneParams()` function. After the user defines the `distribution`
+and the `targets` for the quantiles and density, `tuneParams()` calls
+the `generateStanCode()` function to generate the Stan code for the
+model, which is written to the file `model.stan`. This file is always
+overwritten every time the `generateStanCode()` function is called. It
+then calls the `stan` function to fit the model. Finally, once the model
+is fit, it calls the `summarizeResults()` function to extract the
+results of the fit model. The output of `tuneParams()` is a list with
+the following values:
+
+  - `params` : The fit parameters
+  - `draws` : 10,000 draws from the resulting distribution using the fit
+    parameters
+  - `quantiles` : The quantiles of the draws at the desired upper and
+    lower quantile boundaries
+  - `histogram` : A histogram of the draws
 
 # Author and License
 

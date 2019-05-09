@@ -2,8 +2,8 @@ functions {
   // Differences between tail probabilities and target probabilities
   vector tail_delta(vector y, vector theta, real[] x_r, int[] x_i) {
     vector[2] deltas;
-    deltas[1] = lognormal_cdf(theta[1], y[1], y[2]) - 0.02;
-    deltas[2] = 1 - lognormal_cdf(theta[2], y[1], y[2]) - 0.03;
+    deltas[1] = normal_cdf(theta[1], y[1], y[2]) - 0.01;
+    deltas[2] = 1 - normal_cdf(theta[2], y[1], y[2]) - 0.01;
     return deltas;
   }
 }
@@ -11,8 +11,8 @@ transformed data {
   // Number of simulated observations in generated quantities
   int<lower=0> N = 10000;
   // Target quantiles
-  real l = 0.1; // Lower quantile
-  real u = 6; // Upper quantile
+  real l = -2; // Lower quantile
+  real u = 2; // Upper quantile
   vector[2] theta = [l, u]';
   // Initial guess at parameters
   real mu_guess = 0;
@@ -30,5 +30,5 @@ generated quantities {
   // Simulate data
   real y_sim[N];
   for (n in 1:N)
-    y_sim[n] = lognormal_rng(mu, sigma);
+    y_sim[n] = normal_rng(mu, sigma);
 }
