@@ -62,6 +62,7 @@ generateStanCode <- function(distribution, targets) {
 getStanCodeGenerator <- function() {
     return(list(
         normal    = getStanCode_normal,
+        lognormal    = getStanCode_lognormal,
         beta      = getStanCode_beta,
         inv_gamma = getStanCode_inv_gamma))
 }
@@ -108,6 +109,52 @@ getStanCode_normal <- function(targets) {
     '  real y_sim[N];',
     '  for (n in 1:N)',
     '    y_sim[n] = normal_rng(mu, sigma);',
+    '}',
+    sep='\n'))
+}
+
+# Code for generating Stan model for a Normal distribution
+getStanCode_lognormal <- function(targets) {
+
+    mu_guess    <- 0
+    sigma_guess <- 1
+
+    return(paste(
+    'functions {',
+    '  // Differences between tail probabilities and target probabilities',
+    '  vector tail_delta(vector y, vector theta, real[] x_r, int[] x_i) {',
+    '    vector[2] deltas;',
+    paste('    deltas[1] = lognormal_cdf(theta[1], y[1], y[2]) - ',
+          targets$dens_L, ';', sep=''),
+    paste('    deltas[2] = 1 - lognormal_cdf(theta[2], y[1], y[2]) - ',
+          targets$dens_U, ';', sep=''),
+    '    return deltas;',
+    '  }',
+    '}',
+    'transformed data {',
+    '  // Number of simulated observations in generated quantities',
+    '  int<lower=0> N = 10000;',
+    '  // Target quantiles',
+    paste('  real l = ', targets$bound_L, '; // Lower quantile', sep=''),
+    paste('  real u = ', targets$bound_U, '; // Upper quantile', sep=''),
+    "  vector[2] theta = [l, u]';",
+    '  // Initial guess at parameters',
+    paste('  real mu_guess = ', mu_guess, ';', sep=''),
+    paste('  real sigma_guess = ', sigma_guess, ';', sep=''),
+    "  vector[2] y_guess = [mu_guess, sigma_guess]';",
+    '  // Find parameters that ensures target density values',
+    '  vector[2] y;',
+    '  real x_r[0];',
+    '  int x_i[0];',
+    '  y = algebra_solver(tail_delta, y_guess, theta, x_r, x_i);',
+    '}',
+    'generated quantities {',
+    '  real mu = y[1];',
+    '  real sigma = y[2];',
+    '  // Simulate data',
+    '  real y_sim[N];',
+    '  for (n in 1:N)',
+    '    y_sim[n] = lognormal_rng(mu, sigma);',
     '}',
     sep='\n'))
 }

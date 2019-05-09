@@ -30,6 +30,22 @@ results$quantiles
 results$histogram
 
 # ----------------------------------------------------------------------------
+# Find lognormal distribution parameters with targets:
+# P[x < 0.1] ~ 0.01
+# P[x > 4.0] ~ 0.01
+
+targets = list(
+    bound_L = 0.1,  # LOWER quantile boundary
+    bound_U = 4,    # UPPER quantile boundary
+    dens_L  = 0.01, # Target density below LOWER quantile boundary
+    dens_U  = 0.01) # Target density above UPPER quantile boundary
+
+results = funcs$tuneParams(distribution='lognormal', targets)
+results$params
+results$quantiles
+results$histogram
+
+# ----------------------------------------------------------------------------
 # Find beta distribution parameters with targets:
 # P[x < 0.5] ~ 0.01
 # P[x > 0.99] ~ 0.01

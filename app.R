@@ -37,8 +37,8 @@ getTargetsHtml <- function(input) {
 
 getRenamedDistribution <- function(input) {
   df = data.frame(
-        name      = c('Normal', 'Beta', 'Inverse-Gamma'),
-        codedName = c('normal', 'beta', 'inv_gamma'))
+        name      = c('Normal', 'Log-Normal', 'Beta', 'Inverse-Gamma'),
+        codedName = c('normal', 'lognormal', 'beta', 'inv_gamma'))
   return(as.character(df[which(df$name == input$distribution),]$codedName))
 }
 
@@ -91,7 +91,7 @@ ui <- fluidPage(
       # Input: Selector for choosing dataset
       selectInput(inputId = 'distribution',
                   label = 'Select a distribution:',
-                  choices = c('Normal', 'Beta', 'Inverse-Gamma')),
+                  choices = c('Normal', 'Log-Normal', 'Beta','Inverse-Gamma')),
 
       # Input: Numeric entry for LOWER quantile boundary
       numericInput(inputId = 'bound_L',
