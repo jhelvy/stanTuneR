@@ -80,7 +80,7 @@ buildResultHtml <- function(result) {
 ui <- fluidPage(
 
   # App title
-  titlePanel('Stan Tuner'),
+  titlePanel('stanTuneR'),
 
   # Sidebar layout with a input and output definitions
   sidebarLayout(
@@ -91,7 +91,7 @@ ui <- fluidPage(
       # Input: Selector for choosing dataset
       selectInput(inputId = 'distribution',
                   label   = 'Select a distribution:',
-                  choices = c('Normal', 'Log-Normal', 'Beta', 'Gamma', 
+                  choices = c('Normal', 'Log-Normal', 'Beta', 'Gamma',
                               'Inverse-Gamma')),
 
       # Input: Numeric entry for LOWER quantile boundary

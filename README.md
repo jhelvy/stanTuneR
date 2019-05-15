@@ -1,4 +1,4 @@
-stanTuner
+stanTuneR
 ================
 
 This code uses the algebra solver in [Stan](https://mc-stan.org/) to
@@ -34,7 +34,7 @@ install the `shiny` and `shinycssloaders` libraries
 To use the Shiny app, just run the following code in R:
 
     library(shiny)
-    runGitHub('jhelvy/stanTuner')
+    runGitHub('jhelvy/stanTuneR')
 
 # Example without the Shiny app
 
@@ -84,8 +84,8 @@ results = funcs$tuneParams(distribution='normal', targets)
     ## Chain 1: Iteration: 1 / 1 [100%]  (Sampling)
     ## Chain 1: 
     ## Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-    ## Chain 1:                0.001176 seconds (Sampling)
-    ## Chain 1:                0.001176 seconds (Total)
+    ## Chain 1:                0.001221 seconds (Sampling)
+    ## Chain 1:                0.001221 seconds (Total)
     ## Chain 1:
 
 View the resulting parameters and verify that the quantiles of 10,000
@@ -106,7 +106,7 @@ results$quantiles
 ```
 
     ##        1%       99% 
-    ## -1.999538  1.987362
+    ## -1.999615  2.049685
 
 Finally, view a histogram of the resulting distribution:
 
