@@ -1,7 +1,5 @@
 ---
-title: "README"
-author: "John Helveston"
-date: "4/30/2019"
+title: "stanTuner"
 output: github_document
 ---
 
@@ -9,7 +7,6 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# stanTuner
 This code uses the algebra solver in [Stan](https://mc-stan.org/) to find the parameters of a distribution that produce a desired tail behavior. This can be a useful tool when choosing parameters for prior distributions. Here's how to use it:
 
 1. Choose a distribution.
@@ -18,10 +15,11 @@ This code uses the algebra solver in [Stan](https://mc-stan.org/) to find the pa
 
 Currently supported distributions:
 
-* Normal
-* Log-Normal
-* Beta
-* Inverse Gamma
+- [x] Normal
+- [x] Log-Normal
+- [x] Beta
+- [x] Gamma
+- [x] Inverse Gamma
 
 # Required libraries:
 

@@ -62,6 +62,22 @@ results$quantiles
 results$histogram
 
 # ----------------------------------------------------------------------------
+# Find gamma distribution parameters with targets:
+# P[x < 1.0] ~ 0.01
+# P[x > 10] ~ 0.01
+
+targets = list(
+    bound_L = 1,    # LOWER quantile boundary
+    bound_U = 10,   # UPPER quantile boundary
+    dens_L  = 0.01, # Target density below LOWER quantile boundary
+    dens_U  = 0.01) # Target density above UPPER quantile boundary
+
+results = funcs$tuneParams(distribution='gamma', targets)
+results$params
+results$quantiles
+results$histogram
+
+# ----------------------------------------------------------------------------
 # Find inv_gamma distribution parameters with targets:
 # P[x < 1.0] ~ 0.01
 # P[x > 10] ~ 0.01
