@@ -1,9 +1,5 @@
-README
+stanTuner
 ================
-John Helveston
-4/30/2019
-
-# stanTuner
 
 This code uses the algebra solver in [Stan](https://mc-stan.org/) to
 find the parameters of a distribution that produce a desired tail
@@ -18,10 +14,11 @@ distributions. Here’s how to use it:
 
 Currently supported distributions:
 
-  - Normal
-  - Log-Normal
-  - Beta
-  - Inverse Gamma
+  - \[x\] Normal
+  - \[x\] Log-Normal
+  - \[x\] Beta
+  - \[x\] Gamma
+  - \[x\] Inverse Gamma
 
 # Required libraries:
 
@@ -87,8 +84,8 @@ results = funcs$tuneParams(distribution='normal', targets)
     ## Chain 1: Iteration: 1 / 1 [100%]  (Sampling)
     ## Chain 1: 
     ## Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-    ## Chain 1:                0.000864 seconds (Sampling)
-    ## Chain 1:                0.000864 seconds (Total)
+    ## Chain 1:                0.001176 seconds (Sampling)
+    ## Chain 1:                0.001176 seconds (Total)
     ## Chain 1:
 
 View the resulting parameters and verify that the quantiles of 10,000
@@ -109,7 +106,7 @@ results$quantiles
 ```
 
     ##        1%       99% 
-    ## -2.027494  1.984122
+    ## -1.999538  1.987362
 
 Finally, view a histogram of the resulting distribution:
 
