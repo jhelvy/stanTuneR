@@ -22,12 +22,23 @@ Currently supported distributions:
 
 # Required libraries:
 
-If you don’t want to use the shiny app interface, you only need to have
-the `rstan` library installed (and obviously also have
-[Stan](https://mc-stan.org/) installed).
+Obviously you need to have [Stan](https://mc-stan.org/) installed on
+your machine.
 
-If you want to use the shiny app interface, you will also need to
-install the `shiny` and `shinycssloaders` libraries
+If you don’t want to use the shiny app interface, you only need to have
+the `rstan` library installed:
+
+``` r
+install.packages('rstan')
+```
+
+To use the shiny app, you will also need to install the `shiny` and
+`shinycssloaders` libraries:
+
+``` r
+install.packages('shiny')
+install.packages('shinycssloaders')
+```
 
 # Using the Shiny app
 
@@ -35,6 +46,10 @@ To use the Shiny app, just run the following code in R:
 
     library(shiny)
     runGitHub('jhelvy/stanTuneR')
+
+The interface should look like this:
+
+<img src="./screenshot.png" alt="screenshot" width="800"/>
 
 # Example without the Shiny app
 
@@ -84,8 +99,8 @@ results = funcs$tuneParams(distribution='normal', targets)
     ## Chain 1: Iteration: 1 / 1 [100%]  (Sampling)
     ## Chain 1: 
     ## Chain 1:  Elapsed Time: 0 seconds (Warm-up)
-    ## Chain 1:                0.001221 seconds (Sampling)
-    ## Chain 1:                0.001221 seconds (Total)
+    ## Chain 1:                0.001128 seconds (Sampling)
+    ## Chain 1:                0.001128 seconds (Total)
     ## Chain 1:
 
 View the resulting parameters and verify that the quantiles of 10,000
@@ -106,7 +121,7 @@ results$quantiles
 ```
 
     ##        1%       99% 
-    ## -1.999615  2.049685
+    ## -2.027173  2.066950
 
 Finally, view a histogram of the resulting distribution:
 
@@ -114,7 +129,7 @@ Finally, view a histogram of the resulting distribution:
 results$histogram
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 # Explanation of the backend
 
